@@ -1,0 +1,58 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OpenLayers simple raster and vector</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.3.4/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.3.4/build/ol.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4.js"></script>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script>
+
+	var imageExtent = [-180.5000000,  -90.0000000, 180.5000000,  90.0000000];
+	var rasterLayer = new ol.layer.Image({
+      source: new ol.source.ImageStatic({
+        url: '2017_octprecip.png',
+        crossOrigin: '',
+        projection: 'CRS:84',
+        imageExtent: imageExtent,
+        attributions: "October average precipitation: Climate Prediction Center, 2017"
+      })});
+	var vectorSource = new ol.source.Vector({
+  format: new ol.format.GeoJSON(),
+  url: 'DO_Merge.geojson',
+  attributions: "Drought Monitor: Climate Prediction Center, 2017"
+});
+	var vectorLayer = new ol.layer.Vector({
+  source: vectorSource
+});
+
+
+        var map = new ol.Map({
+  layers: [
+    new ol.layer.Tile({
+      source: new ol.source.OSM()
+    }),
+    rasterLayer,
+    vectorLayer
+  ],
+  target: 'map',
+  controls: ol.control.defaults({
+      attributionOptions: ({
+      collapsible: false
+    })
+  }),
+  view: new ol.View({
+    projection: 'EPSG:4326',
+    center: [0, 0],
+    zoom: 2
+  })
+});
+    </script>
+  </body>
+</html>
